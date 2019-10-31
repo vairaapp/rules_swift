@@ -1,0 +1,108 @@
+load(
+    "@build_bazel_rules_swift//swift:swift.bzl",
+    "swift_library",
+)
+
+swift_library(
+    name = "NIO",
+    srcs = glob([
+        "Sources/NIO/**/*.swift",
+    ]),
+    module_name = "NIO",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_apple_swift_nio//:NIOConcurrencyHelpers",
+        "@com_github_apple_swift_nio//:CNIOLinux",
+    ],
+)
+
+swift_library(
+    name = "NIOHTTP1",
+    srcs = glob([
+        "Sources/NIOHTTP1/**/*.swift",
+    ]),
+    module_name = "NIOHTTP1",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_apple_swift_nio//:CNIOHTTPParser",
+        "@com_github_apple_swift_nio//:NIO",
+    ],
+)
+
+swift_library(
+    name = "NIOConcurrencyHelpers",
+    srcs = glob([
+        "Sources/NIOConcurrencyHelpers/**/*.swift",
+    ]),
+    module_name = "NIOConcurrencyHelpers",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_apple_swift_nio//:CNIOAtomics",
+    ],
+)
+
+swift_library(
+    name = "NIOTLS",
+    srcs = glob([
+        "Sources/NIOTLS/**/*.swift",
+    ]),
+    module_name = "NIOTLS",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_apple_swift_nio//:NIO",
+    ],
+)
+
+swift_library(
+    name = "NIOFoundationCompat",
+    srcs = glob([
+        "Sources/NIOFoundationCompat/**/*.swift",
+    ]),
+    module_name = "NIOFoundationCompat",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_apple_swift_nio//:NIO",
+    ],
+)
+
+cc_library(
+    name = "CNIOAtomics",
+    srcs = glob([
+        "Sources/CNIOAtomics/include/**/*.h",
+        "Sources/CNIOAtomics/src/**/*.c",
+        "Sources/CNIOAtomics/src/**/*.cc",
+        "Sources/CNIOAtomics/src/**/*.h",
+    ]),
+    hdrs = ["Sources/CNIOAtomics/include/CNIOAtomics.h"],
+    copts = ["-DPB_NO_PACKED_STRUCTS=1"],
+    includes = ["Sources/CNIOAtomics/include"],
+    tags = ["swift_module=CNIOAtomics"],
+)
+
+cc_library(
+    name = "CNIOLinux",
+    srcs = glob([
+        "Sources/CNIOLinux/include/**/*.h",
+        "Sources/CNIOLinux/src/**/*.c",
+        "Sources/CNIOLinux/src/**/*.cc",
+        "Sources/CNIOLinux/src/**/*.h",
+    ]),
+    hdrs = ["Sources/CNIOLinux/include/CNIOLinux.h"],
+    copts = ["-DPB_NO_PACKED_STRUCTS=1"],
+    includes = ["Sources/CNIOLinux/include"],
+    tags = ["swift_module=CNIOLinux"],
+)
+
+cc_library(
+    name = "CNIOHTTPParser",
+    srcs = glob([
+        "Sources/CNIOHTTPParser/include/**/*.h",
+        "Sources/CNIOHTTPParser/src/**/*.c",
+        "Sources/CNIOHTTPParser/src/**/*.cc",
+        "Sources/CNIOHTTPParser/src/**/*.h",
+    ]),
+    hdrs = ["Sources/CNIOHTTPParser/include/CNIOHTTPParser.h"],
+    copts = ["-DPB_NO_PACKED_STRUCTS=1"],
+    includes = ["Sources/CNIOHTTPParser/include"],
+    tags = ["swift_module=CNIOHTTPParser"],
+)

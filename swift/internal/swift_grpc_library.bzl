@@ -109,31 +109,31 @@ def _register_grpcswift_generate_action(
 
     protoc_args.add(
         protoc_plugin_executable,
-        format = "--plugin=protoc-gen-swiftgrpc=%s",
+        format = "--plugin=protoc-gen-grpc-swift=%s",
     )
-    protoc_args.add(generated_dir_path, format = "--swiftgrpc_out=%s")
-    protoc_args.add("--swiftgrpc_opt=Visibility=Public")
+    protoc_args.add(generated_dir_path, format = "--grpc-swift_out=%s")
+    protoc_args.add("--grpc-swift_opt=Visibility=Public")
     if flavor == "client":
-        protoc_args.add("--swiftgrpc_opt=Client=true")
-        protoc_args.add("--swiftgrpc_opt=Server=false")
+        protoc_args.add("--grpc-swift_opt=Client=true")
+        protoc_args.add("--grpc-swift_opt=Server=false")
     elif flavor == "client_stubs":
-        protoc_args.add("--swiftgrpc_opt=Client=true")
-        protoc_args.add("--swiftgrpc_opt=Server=false")
-        protoc_args.add("--swiftgrpc_opt=TestStubs=true")
-        protoc_args.add("--swiftgrpc_opt=Implementations=false")
+        protoc_args.add("--grpc-swift_opt=Client=true")
+        protoc_args.add("--grpc-swift_opt=Server=false")
+        protoc_args.add("--grpc-swift_opt=TestStubs=true")
+        protoc_args.add("--grpc-swift_opt=Implementations=false")
     elif flavor == "server":
-        protoc_args.add("--swiftgrpc_opt=Client=false")
-        protoc_args.add("--swiftgrpc_opt=Server=true")
+        protoc_args.add("--grpc-swift_opt=Client=false")
+        protoc_args.add("--grpc-swift_opt=Server=true")
     else:
         fail("Unsupported swift_grpc_library flavor", attr = "flavor")
     protoc_args.add_all(
         extra_module_imports,
-        format_each = "--swiftgrpc_opt=ExtraModuleImports=%s",
+        format_each = "--grpc-swift_opt=ExtraModuleImports=%s",
     )
     if module_mapping_file:
         protoc_args.add(
             module_mapping_file,
-            format = "--swiftgrpc_opt=ProtoPathModuleMappings=%s",
+            format = "--grpc-swift_opt=ProtoPathModuleMappings=%s",
         )
     protoc_args.add("--descriptor_set_in")
     protoc_args.add_joined(transitive_descriptor_sets, join_with = ":")
@@ -160,7 +160,7 @@ def _register_grpcswift_generate_action(
             protoc_executable,
             protoc_plugin_executable,
         ],
-        mnemonic = "ProtocGenSwiftGRPC",
+        mnemonic = "ProtocGenGRPC",
         outputs = generated_files,
         progress_message = "Generating Swift sources for {}".format(label),
     )
@@ -214,7 +214,7 @@ def _swift_grpc_library_impl(ctx):
         transitive_module_mapping_file,
         ctx.executable._mkdir_and_run,
         ctx.executable._protoc,
-        ctx.executable._protoc_gen_swiftgrpc,
+        ctx.executable._protoc_gen_grpc_swift,
         ctx.attr.flavor,
         extra_module_imports,
     )
@@ -348,7 +348,7 @@ The kind of definitions that should be generated:
             ),
             # TODO(b/63389580): Migrate to proto_lang_toolchain.
             "_proto_support": attr.label_list(
-                default = [Label("@com_github_grpc_grpc_swift//:SwiftGRPC")],
+                default = [Label("@com_github_grpc_grpc_swift//:GRPC")],
             ),
             "_protoc": attr.label(
                 cfg = "host",
@@ -357,10 +357,10 @@ The kind of definitions that should be generated:
                 ),
                 executable = True,
             ),
-            "_protoc_gen_swiftgrpc": attr.label(
+            "_protoc_gen_grpc_swift": attr.label(
                 cfg = "host",
                 default = Label(
-                    "@com_github_grpc_grpc_swift//:protoc-gen-swiftgrpc",
+                    "@com_github_grpc_grpc_swift//:protoc-gen-grpc-swift",
                 ),
                 executable = True,
             ),

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import Dispatch
-import SwiftGRPC
+import GRPC
 import examples_xplatform_grpc_echo_proto
 import examples_xplatform_grpc_echo_server_services_swift
 
