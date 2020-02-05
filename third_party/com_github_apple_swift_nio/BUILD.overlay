@@ -12,6 +12,7 @@ swift_library(
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_apple_swift_nio//:NIOConcurrencyHelpers",
+        "@com_github_apple_swift_nio//:CNIODarwin",
         "@com_github_apple_swift_nio//:CNIOLinux",
     ],
 )
@@ -77,6 +78,20 @@ cc_library(
     copts = ["-DPB_NO_PACKED_STRUCTS=1"],
     includes = ["Sources/CNIOAtomics/include"],
     tags = ["swift_module=CNIOAtomics"],
+)
+
+cc_library(
+    name = "CNIODarwin",
+    srcs = glob([
+        "Sources/CNIODarwin/include/**/*.h",
+        "Sources/CNIODarwin/src/**/*.c",
+        "Sources/CNIODarwin/src/**/*.cc",
+        "Sources/CNIODarwin/src/**/*.h",
+    ]),
+    hdrs = ["Sources/CNIODarwin/include/CNIODarwin.h"],
+    copts = ["-DPB_NO_PACKED_STRUCTS=1"],
+    includes = ["Sources/CNIODarwin/include"],
+    tags = ["swift_module=CNIODarwin"],
 )
 
 cc_library(

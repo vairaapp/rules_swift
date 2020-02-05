@@ -8,6 +8,9 @@ swift_library(
     srcs = glob([
         "Sources/NIOTransportServices/**/*.swift",
     ]),
+    deps = [
+        "@com_github_apple_swift_nio//:NIO",
+    ],
     module_name = "NIOTransportServices",
     visibility = ["//visibility:public"],
 )
